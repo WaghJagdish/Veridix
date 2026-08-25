@@ -1,0 +1,60 @@
+# =========================
+# Frontend - Next.js
+# =========================
+
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/dist/
+frontend/build/
+
+# TypeScript build cache
+frontend/*.tsbuildinfo
+
+# Environment variables
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+
+# =========================
+# Backend - Python
+# =========================
+
+backend/__pycache__/
+backend/**/*.py[cod]
+
+# Virtual environments
+backend/venv/
+backend/.venv/
+venv/
+.venv/
+
+# Environment variables
+backend/.env
+
+# Database
+backend/*.db
+backend/*.sqlite
+backend/*.sqlite3
+
+# Python cache/build
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+
+
+# =========================
+# General
+# =========================
+
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
