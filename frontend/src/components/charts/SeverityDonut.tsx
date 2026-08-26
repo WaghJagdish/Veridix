@@ -13,7 +13,7 @@ export function SeverityDonut({ data }: { data: { critical: number, high: number
   const total = chartData.reduce((acc, curr) => acc + curr.value, 0);
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col border border-border bg-card shadow-xs">
       <CardHeader>
         <CardTitle>Severity Distribution</CardTitle>
       </CardHeader>

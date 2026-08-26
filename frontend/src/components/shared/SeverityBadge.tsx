@@ -1,18 +1,21 @@
 import { Badge } from "@/components/ui/badge"
 import { Severity } from "@/lib/types"
 
-const severityColors = {
-  critical: "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800",
-  high: "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-800",
-  medium: "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800",
-  low: "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800",
-  none: "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700",
+const severityColors: Record<string, string> = {
+  critical: "bg-rose-100 text-rose-800 border-rose-300 font-bold",
+  high: "bg-orange-100 text-orange-800 border-orange-300 font-bold",
+  medium: "bg-amber-100 text-amber-800 border-amber-300 font-bold",
+  low: "bg-emerald-100 text-emerald-800 border-emerald-300 font-semibold",
+  none: "bg-emerald-50 text-emerald-700 border-emerald-200 font-normal",
 }
 
-export function SeverityBadge({ severity }: { severity: Severity }) {
+export function SeverityBadge({ severity }: { severity?: Severity | string | null }) {
+  const s = severity ? severity.toLowerCase() : 'none';
+  const colorClass = severityColors[s] || severityColors.none;
+
   return (
-    <Badge variant="outline" className={`font-semibold uppercase tracking-wider text-[10px] ${severityColors[severity]}`}>
-      {severity}
+    <Badge variant="outline" className={`uppercase tracking-wider text-[10px] px-2 py-0.5 rounded ${colorClass}`}>
+      {s}
     </Badge>
   )
 }

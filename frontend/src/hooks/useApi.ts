@@ -39,10 +39,10 @@ export function useScanSummary(id: string) {
   });
 }
 
-export function useFindings(scanId: string) {
+export function useFindings(scanId: string, params?: { severity?: string; language?: string; category?: string }) {
   return useQuery({
-    queryKey: ['findings', scanId],
-    queryFn: () => api.findings.listByScan(scanId),
+    queryKey: ['findings', scanId, params],
+    queryFn: () => api.findings.listByScan(scanId, params),
     enabled: !!scanId,
   });
 }
@@ -52,5 +52,13 @@ export function useFinding(scanId: string, findingId: string) {
     queryKey: ['findings', scanId, findingId],
     queryFn: () => api.findings.get(findingId),
     enabled: !!scanId && !!findingId,
+  });
+}
+
+export function useScanTestCases(scanId: string) {
+  return useQuery({
+    queryKey: ['scans', scanId, 'test-cases'],
+    queryFn: () => api.scans.getTestCases(scanId),
+    enabled: !!scanId,
   });
 }
