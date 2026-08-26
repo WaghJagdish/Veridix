@@ -34,34 +34,34 @@ export default function ReportPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between border-b pb-4">
+      <div className="flex items-center justify-between border-b border-border pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <FileText className="text-muted-foreground" size={20} />
-            <h1 className="text-2xl font-bold tracking-tight">Safety Audit Report</h1>
+            <FileText className="text-emerald-700" size={20} />
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">Safety Audit Report</h1>
           </div>
           <p className="text-sm text-muted-foreground">{scan.name}</p>
         </div>
         {scan.is_demo && (
-          <span className="text-xs bg-amber-100 text-amber-800 border border-amber-200 rounded px-2 py-1 font-medium">
+          <span className="text-xs bg-amber-100 text-amber-800 border border-amber-300 rounded px-2.5 py-1 font-bold">
             DEMO EVALUATION
           </span>
         )}
       </div>
 
       {/* Report Preview */}
-      <Card className="p-8 border-2 space-y-6">
+      <Card className="p-8 border border-border bg-card shadow-xs space-y-6">
         {/* Report Header */}
-        <div className="border-b pb-4 flex items-start justify-between">
+        <div className="border-b border-border pb-4 flex items-start justify-between">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Shield className="text-indigo-600" size={22} />
-              <span className="text-xl font-bold text-indigo-700 tracking-tight">VERIDIX</span>
+              <Shield className="text-emerald-600" size={22} />
+              <span className="text-xl font-bold text-emerald-800 tracking-tight">VERIDIX</span>
             </div>
             <p className="text-xs text-muted-foreground">AI Safety Evaluation Report</p>
           </div>
           <div className="text-right text-sm text-muted-foreground">
-            <p>Scan ID: <span className="font-mono text-xs">{scan.id.slice(0, 8)}...</span></p>
+            <p>Scan ID: <span className="font-mono text-xs text-foreground">{scan.id.slice(0, 8)}...</span></p>
             <p>{new Date(scan.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" })}</p>
           </div>
         </div>
@@ -69,10 +69,10 @@ export default function ReportPage() {
         {/* Target Info */}
         <div>
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">Target</h2>
-          <div className="grid grid-cols-3 gap-4 text-sm">
-            <div><span className="text-muted-foreground">Provider:</span> <strong>{scan.preset || "—"}</strong></div>
-            <div><span className="text-muted-foreground">Languages:</span> <strong>{scan.languages?.join(", ") || "—"}</strong></div>
-            <div><span className="text-muted-foreground">Status:</span> <strong className="capitalize">{scan.status}</strong></div>
+          <div className="grid grid-cols-3 gap-4 text-sm bg-muted/40 p-3.5 rounded-lg border border-border">
+            <div><span className="text-muted-foreground">Provider:</span> <strong className="text-foreground">{scan.preset || "—"}</strong></div>
+            <div><span className="text-muted-foreground">Languages:</span> <strong className="text-foreground">{scan.languages?.join(", ") || "—"}</strong></div>
+            <div><span className="text-muted-foreground">Status:</span> <strong className="capitalize text-foreground">{scan.status}</strong></div>
           </div>
         </div>
 
@@ -81,20 +81,20 @@ export default function ReportPage() {
           <div>
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Executive Summary</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <div className="rounded-lg bg-slate-50 border p-3 text-center">
-                <div className="text-2xl font-bold text-slate-800">{summary.overall_safety_score}%</div>
+              <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-center">
+                <div className="text-2xl font-bold text-emerald-800">{summary.overall_safety_score}%</div>
                 <div className="text-xs text-muted-foreground mt-1">Overall Safety</div>
               </div>
-              <div className="rounded-lg bg-red-50 border border-red-100 p-3 text-center">
-                <div className="text-2xl font-bold text-red-700">{summary.critical_findings}</div>
+              <div className="rounded-lg bg-rose-50 border border-rose-200 p-3 text-center">
+                <div className="text-2xl font-bold text-rose-700">{summary.critical_findings}</div>
                 <div className="text-xs text-muted-foreground mt-1">Critical Findings</div>
               </div>
-              <div className="rounded-lg bg-orange-50 border border-orange-100 p-3 text-center">
+              <div className="rounded-lg bg-orange-50 border border-orange-200 p-3 text-center">
                 <div className="text-2xl font-bold text-orange-700">{summary.drift_events}</div>
                 <div className="text-xs text-muted-foreground mt-1">Drift Events</div>
               </div>
-              <div className="rounded-lg bg-blue-50 border border-blue-100 p-3 text-center">
-                <div className="text-2xl font-bold text-blue-700">{summary.total_tests}</div>
+              <div className="rounded-lg bg-teal-50 border border-teal-200 p-3 text-center">
+                <div className="text-2xl font-bold text-teal-800">{summary.total_tests}</div>
                 <div className="text-xs text-muted-foreground mt-1">Tests Run</div>
               </div>
             </div>
@@ -109,13 +109,13 @@ export default function ReportPage() {
               {Object.entries(summary.language_scores).map(([lang, score]) => (
                 <div key={lang} className="flex items-center gap-3">
                   <span className="text-xs font-medium w-20 capitalize">{lang === "hinglish" ? "Hinglish" : lang.toUpperCase()}</span>
-                  <div className="flex-1 bg-slate-100 rounded-full h-2">
+                  <div className="flex-1 bg-muted rounded-full h-2">
                     <div
-                      className={`h-2 rounded-full ${score >= 80 ? "bg-green-500" : score >= 60 ? "bg-yellow-500" : "bg-red-500"}`}
+                      className={`h-2 rounded-full ${score >= 80 ? "bg-emerald-600" : score >= 60 ? "bg-amber-500" : "bg-rose-500"}`}
                       style={{ width: `${score}%` }}
                     />
                   </div>
-                  <span className="text-xs font-semibold w-12 text-right">{score}%</span>
+                  <span className="text-xs font-semibold w-12 text-right text-foreground">{score}%</span>
                 </div>
               ))}
             </div>
@@ -123,10 +123,10 @@ export default function ReportPage() {
         )}
 
         {/* Methodology Note */}
-        <div className="bg-slate-50 rounded-lg p-4 border text-xs text-muted-foreground space-y-1">
-          <p className="font-semibold text-slate-600">Methodology</p>
+        <div className="bg-muted/40 rounded-lg p-4 border border-border text-xs text-muted-foreground space-y-1">
+          <p className="font-semibold text-foreground">Methodology</p>
           <p>Evaluation used VERIDIX Safety Drift Analysis v0.1. Safety scores computed from LLM-as-Judge verdicts with structured confidence scoring. Drift Score = max(safety_score) − min(safety_score) across language variants. Test cases mapped to OWASP LLM Top 10 (2025).</p>
-          <p className="text-amber-700 font-medium mt-2">Disclaimer: This report is an assessment tool. Evaluation results are mapped to selected OWASP LLM Top 10 (2025) controls. This report does not constitute legal compliance certification or regulatory clearance.</p>
+          <p className="text-amber-800 font-medium mt-2">Disclaimer: This report is an assessment tool. Evaluation results are mapped to selected OWASP LLM Top 10 (2025) controls. This report does not constitute legal compliance certification or regulatory clearance.</p>
         </div>
       </Card>
 
@@ -135,7 +135,7 @@ export default function ReportPage() {
         <Button
           onClick={handleGenerate}
           disabled={generating}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white"
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-600/20"
         >
           {generating ? (
             <><Activity className="mr-2 animate-spin" size={16} /> Generating PDF...</>
@@ -145,25 +145,25 @@ export default function ReportPage() {
         </Button>
 
         {reportId && (
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild className="border-border hover:bg-accent">
             <a href={api.reports.download(reportId)} target="_blank" rel="noopener noreferrer">
-              <Download className="mr-2" size={16} /> Download PDF
+              <Download className="mr-2 text-emerald-700" size={16} /> Download PDF
             </a>
           </Button>
         )}
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">
+        <div className="flex items-center gap-2 text-sm text-rose-800 bg-rose-50 border border-rose-200 rounded-lg p-3">
           <AlertTriangle size={16} />
           {error}
         </div>
       )}
 
       {reportId && (
-        <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg p-3">
+        <div className="flex items-center gap-2 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg p-3">
           <CheckCircle2 size={16} />
-          Report generated successfully. Click "Download PDF" to save.
+          Report generated successfully. Click &quot;Download PDF&quot; to save.
         </div>
       )}
     </div>

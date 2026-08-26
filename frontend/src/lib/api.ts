@@ -46,11 +46,11 @@ export const api = {
     get: (findingId: string) => fetchApi<Finding>(`/findings/${findingId}`),
   },
   reports: {
-    generate: (scanId: string) => fetchApi<{ id: string; download_url: string }>(`/scans/${scanId}/reports`, { method: 'POST' }),
+    generate: (scanId: string) => fetchApi<{ id: string; pdf_path: string }>(`/reports/scans/${scanId}`, { method: 'POST' }),
     download: (reportId: string) => `${BASE_URL}/reports/${reportId}/download`,
   },
   demo: {
-    seed: () => fetchApi<{ success: boolean; scan_id?: string; project_id?: string; target_id?: string }>('/demo/seed', { method: 'POST' }),
+    seed: () => fetchApi<{ success: boolean; message?: string; scan_id?: string; project_id?: string; target_id?: string }>('/demo/seed', { method: 'POST' }),
     status: () => fetchApi<{ seeded: boolean; scan_id?: string; project_id?: string; target_id?: string }>('/demo/status'),
   },
 };

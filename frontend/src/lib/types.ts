@@ -12,7 +12,7 @@ export interface Target {
   provider: Provider;
   model: string;
   endpoint?: string;
-  api_key_masked: string;
+  api_key_masked?: string;
   system_prompt?: string;
   app_description?: string;
   verified_at?: string;
@@ -23,6 +23,7 @@ export interface Scan {
   id: string;
   target_id: string;
   target?: Target;
+  project_id?: string;
   name: string;
   status: ScanStatus;
   preset: ScanPreset;
@@ -41,8 +42,13 @@ export interface Scan {
 }
 
 export interface ScanSummary {
+  scan_id: string;
   overall_safety_score: number;
   safety_drift_score: number;
+  jailbreak_resistance?: number;
+  refusal_quality?: number;
+  policy_adherence?: number;
+  language_consistency?: number;
   critical_findings: number;
   high_findings: number;
   medium_findings: number;
@@ -51,24 +57,59 @@ export interface ScanSummary {
   safe_tests: number;
   borderline_tests: number;
   unsafe_tests: number;
+  error_tests?: number;
   total_tests: number;
   drift_events: number;
-  high_drift_events: number;
-  language_scores: Record<Language, number>;
+  critical_drift?: number;
+  high_drift?: number;
+  medium_drift?: number;
+  low_drift?: number;
+  no_drift?: number;
+  high_drift_events?: number;
+  language_scores: Record<Language | string, number>;
   category_scores: Record<string, number>;
   heatmap_data: HeatmapCell[];
 }
 
 export interface HeatmapCell {
-  language: Language;
+  language: Language | string;
   category: string;
   score: number;
   test_count: number;
 }
 
+export interface EvaluationDetail {
+  verdict: Verdict | string;
+  severity: Severity | string;
+  confidence: number;
+  refusal_quality: number;
+  policy_adherence: number;
+  reasoning: string;
+  evidence: string;
+}
+
+export interface LanguageVariantDetail {
+  language: Language;
+  prompt: string;
+  response?: string | null;
+  latency_ms?: number | null;
+  status?: string | null;
+  evaluation?: EvaluationDetail | null;
+  // Fallbacks
+  verdict?: Verdict | string;
+  severity?: Severity | string;
+  confidence?: number;
+  refusal_quality?: number;
+  policy_adherence?: number;
+  reasoning?: string;
+  evidence?: string;
+}
+
 export interface Finding {
   id: string;
   scan_id: string;
+  test_case_id?: string;
+  drift_event_id?: string;
   finding_ref: string;
   title: string;
   category: string;
@@ -76,30 +117,18 @@ export interface Finding {
   confidence: number;
   language: Language;
   attack_type: string;
-  attack_strategy: string;
+  attack_strategy?: string;
   owasp_ref?: string;
   prompt: string;
   model_response: string;
   evaluator_reasoning: string;
   remediation: string;
+  created_at: string;
   drift_score?: number;
   drift_level?: DriftLevel;
-  created_at: string;
+  drift_explanation?: string;
+  contributing_factors?: string[];
   language_variants?: LanguageVariantDetail[];
-}
-
-export interface LanguageVariantDetail {
-  language: Language;
-  prompt: string;
-  response: string;
-  verdict: Verdict;
-  severity: Severity;
-  confidence: number;
-  refusal_quality: number;
-  policy_adherence: number;
-  reasoning: string;
-  evidence: string;
-  latency_ms: number;
 }
 
 export interface ScanEvent {
