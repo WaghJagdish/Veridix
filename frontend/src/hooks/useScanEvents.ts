@@ -9,7 +9,7 @@ export function useScanEvents(scanId: string, isRunning: boolean) {
   useEffect(() => {
     if (!isRunning) return;
     
-    const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/scans/${scanId}/events`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/scans/${scanId}/events`;
     
     // In a real app we'd use EventSource, but handling fallback/mock for demo:
     let isMounted = true;
