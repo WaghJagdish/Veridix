@@ -75,8 +75,8 @@ export function Sidebar() {
       {/* Brand Header */}
       <div className="flex h-16 items-center justify-between px-4 border-b-1.5 border-ink bg-white font-mono">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 bg-ink border-1.5 border-ink flex items-center justify-center p-0.5 shadow-brutal transition-transform group-hover:-translate-y-0.5 overflow-hidden">
-            <img src="/vectorized.svg" alt="VERIDIX Logo" className="w-full h-full object-contain filter invert" />
+          <div className="h-10 w-auto flex items-center justify-center transition-transform group-hover:scale-105">
+            <img src="/vectorized.svg" alt="VERIDIX Logo" className="h-full w-auto object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">

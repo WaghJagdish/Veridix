@@ -113,8 +113,8 @@ export function TopBar() {
 
         {/* User Avatar */}
         <div className="flex items-center gap-2 pl-2 border-l-1.5 border-ink/20">
-          <div className="h-7 w-7 bg-ink border border-ink flex items-center justify-center p-0.5 shadow-brutal overflow-hidden">
-            <img src="/vectorized.svg" alt="VERIDIX" className="w-full h-full object-contain filter invert" />
+          <div className="h-8 w-auto flex items-center justify-center">
+            <img src="/vectorized.svg" alt="VERIDIX" className="h-full w-auto object-contain" />
           </div>
         </div>
       </div>
