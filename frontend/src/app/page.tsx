@@ -85,8 +85,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link className="flex items-center gap-3 group" href="/">
-              <div className="w-9 h-9 bg-ink text-acid border-1.5 border-ink flex items-center justify-center font-mono font-black text-lg shadow-brutal transition-transform group-hover:-translate-y-0.5">
-                V
+              <div className="w-10 h-10 bg-ink border-1.5 border-ink flex items-center justify-center p-1 shadow-brutal transition-transform group-hover:-translate-y-0.5 overflow-hidden">
+                <img src="/vectorized.svg" alt="VERIDIX Logo" className="w-full h-full object-contain filter invert" />
               </div>
               <div>
                 <div className="flex items-center gap-2">

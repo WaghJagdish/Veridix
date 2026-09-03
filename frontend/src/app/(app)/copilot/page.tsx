@@ -212,17 +212,17 @@ Select any **Safety Audit Test** from the dropdown selector above to talk to me 
   return (
     <div className="max-w-5xl mx-auto space-y-4">
       {/* Header with Test Selector */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-1.5 border-ink pb-4 bg-white p-5 border-1.5 shadow-brutal font-mono text-ink">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center shadow-md shadow-purple-600/20">
-            <Sparkles className="text-white h-5 w-5" />
+          <div className="h-9 w-9 bg-ink text-acid border border-ink flex items-center justify-center shadow-brutal">
+            <Sparkles className="h-5 w-5 text-acid" />
           </div>
           <div>
-            <h1 className="text-xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
+            <h1 className="text-2xl font-black uppercase tracking-tight text-ink font-display flex items-center gap-2">
               AI Security Copilot
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800 border border-purple-200">Llama-3.3 70B</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 bg-acid text-ink border border-ink font-mono">GPT-OSS-120B</span>
             </h1>
-            <p className="text-xs text-muted-foreground">Select a test scan to give the assistant exact vulnerability context</p>
+            <p className="text-xs text-ink/70 font-sans">Select a test scan to give the assistant exact vulnerability context</p>
           </div>
         </div>
 

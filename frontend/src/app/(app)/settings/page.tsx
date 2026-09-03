@@ -63,19 +63,19 @@ export default function SettingsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6 py-2">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-1.5 border-ink pb-5 bg-white p-5 border-1.5 shadow-brutal font-mono text-ink">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Settings className="text-emerald-700" size={22} />
-            <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Platform Settings</h1>
+            <Settings className="text-safety-teal" size={22} />
+            <h1 className="text-3xl font-black uppercase tracking-tight text-ink font-display">Platform Settings</h1>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-ink/70 font-sans">
             Configure LLM judge models, Indic linguistic thresholds, API credentials, and evaluation parameters.
           </p>
         </div>
 
         {savedNotice && (
-          <div className="flex items-center gap-1.5 text-xs text-emerald-800 bg-emerald-100 px-3 py-1.5 rounded-lg border border-emerald-300 font-semibold animate-fade-in">
+          <div className="flex items-center gap-1.5 text-xs text-ink bg-acid px-3 py-1.5 border border-ink font-bold font-mono">
             <CheckCircle2 size={14} /> Settings Saved Successfully
           </div>
         )}
