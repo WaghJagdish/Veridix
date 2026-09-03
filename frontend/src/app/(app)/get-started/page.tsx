@@ -25,12 +25,12 @@ export default function GetStartedPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}
-      <div className="space-y-2">
+      <div className="space-y-2 bg-white p-5 border-1.5 border-ink shadow-brutal font-mono text-ink">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="text-emerald-700" size={24} />
-          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Get Started with VERIDIX</h1>
+          <ShieldCheck className="text-safety-teal" size={24} />
+          <h1 className="text-3xl font-black uppercase tracking-tight text-ink font-display">Get Started with VERIDIX</h1>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs text-ink/70 font-sans">
           Choose how you want to test your AI model&apos;s safety. All approaches use the same backend engine.
         </p>
       </div>
