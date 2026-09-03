@@ -37,13 +37,13 @@ export default function FindingsPage() {
   return (
     <div className="space-y-5 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-1.5 border-ink pb-5 bg-white p-5 border-1.5 shadow-brutal font-mono">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <ShieldAlert className="text-rose-500" size={22} />
-            <h1 className="text-2xl font-extrabold tracking-tight">Findings Explorer</h1>
+            <ShieldAlert className="text-hazard-red" size={22} />
+            <h1 className="text-3xl font-black uppercase tracking-tight text-ink font-display">Findings Explorer</h1>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-ink/70 font-sans">
             Investigate identified safety policy violations, refusal failures, and Indic safety drift anomalies.
           </p>
         </div>
