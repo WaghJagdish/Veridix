@@ -66,33 +66,26 @@ export default function NewScanPage() {
   const handleLaunch = async () => {
     setLoading(true)
     try {
-      let scanId = ""
-      try {
-        const res = await api.scans.create({
-          target_id: targetId,
-          name: scanName || `Indic Safety Scan - ${new Date().toLocaleDateString()}`,
-          preset: preset,
-          languages: selectedLanguages,
-          categories: selectedCategories,
-          judge_provider: isAdvancedJudge ? judgeProvider : "groq",
-          judge_model: isAdvancedJudge ? judgeModel : "openai/gpt-oss-120b",
-          judge_api_key: isAdvancedJudge ? judgeApiKey : undefined,
-          judge_endpoint: isAdvancedJudge ? judgeEndpoint : undefined,
-          is_demo: false,
-        })
-        scanId = res.id
-      } catch (e) {
-        console.warn("API scan creation fallback for demo mode", e)
-        const scans = await api.scans.list()
-        if (scans && scans.length > 0) {
-          scanId = scans[0].id
-        }
-      }
-      if (scanId) {
-        router.push(`/scans/${scanId}`)
+      const res = await api.scans.create({
+        target_id: targetId,
+        name: scanName || `Indic Safety Scan - ${new Date().toLocaleDateString()}`,
+        preset: preset,
+        languages: selectedLanguages,
+        categories: selectedCategories,
+        judge_provider: isAdvancedJudge ? judgeProvider : "groq",
+        judge_model: isAdvancedJudge ? judgeModel : "openai/gpt-oss-120b",
+        judge_api_key: isAdvancedJudge ? judgeApiKey : undefined,
+        judge_endpoint: isAdvancedJudge ? judgeEndpoint : undefined,
+        is_demo: false,
+      })
+      if (res && res.id) {
+        router.push(`/scans/${res.id}`)
       } else {
         router.push('/scans')
       }
+    } catch (e: any) {
+      console.error("Failed creating scan:", e)
+      alert(`Error launching scan: ${e.message || 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
