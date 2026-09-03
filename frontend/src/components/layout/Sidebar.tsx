@@ -74,7 +74,7 @@ export function Sidebar() {
     <aside className="flex h-screen w-64 flex-col bg-chalk border-r-1.5 border-ink select-none font-mono text-ink transition-all duration-200">
       {/* Brand Header */}
       <div className="flex h-16 items-center justify-between px-4 border-b-1.5 border-ink bg-white">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
+        <Link href="/" className="flex items-center gap-3 group">
           <div className="w-8 h-8 bg-ink text-acid border-1.5 border-ink flex items-center justify-center font-mono font-black text-base shadow-brutal transition-transform group-hover:-translate-y-0.5">
             V
           </div>

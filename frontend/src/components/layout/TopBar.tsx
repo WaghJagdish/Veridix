@@ -25,7 +25,7 @@ export function TopBar() {
     const parts = pathname.split('/').filter(Boolean);
     if (parts.length === 0) return [{ label: 'Dashboard', href: '/dashboard' }];
 
-    const breadcrumbs = [{ label: 'VERIDIX', href: '/dashboard' }];
+    const breadcrumbs = [{ label: 'VERIDIX', href: '/' }];
     let currentPath = '';
 
     parts.forEach((part, index) => {
