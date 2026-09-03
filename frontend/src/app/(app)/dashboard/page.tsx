@@ -112,41 +112,43 @@ export default function DashboardPage() {
   const driftLevel = safetyDrift > 0.75 ? "Critical" : safetyDrift > 0.5 ? "High" : safetyDrift > 0.3 ? "Medium" : "Low";
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-6 max-w-7xl mx-auto font-mono text-ink">
       {/* Hero Welcome & Quick Launch */}
-      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 bg-gradient-to-r from-emerald-50 via-emerald-100/30 to-teal-50/50 p-6 rounded-2xl border border-emerald-200/80 shadow-xs">
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 bg-white p-6 border-1.5 border-ink shadow-brutal">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
-              Enterprise Trust & Safety
+            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-ink text-acid border border-ink">
+              TELEMETRY DESK // VOL. II
             </span>
             {latestScan?.is_demo && (
-              <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
-                Demo Mode
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-acid text-ink border border-ink">
+                Demo Dispatch
               </span>
             )}
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
+          <h1 className="text-3xl font-black uppercase tracking-tight text-ink font-display">
             Indic AI Safety Command Center
           </h1>
-          <p className="text-xs text-muted-foreground max-w-2xl">
+          <p className="text-xs text-ink/80 max-w-2xl font-sans">
             Evaluate, benchmark, and guard LLMs against linguistic vulnerabilities across English, Hindi, and Hinglish.
           </p>
         </div>
 
         <div className="flex items-center gap-3 flex-shrink-0">
-          <Button asChild variant="outline" size="sm" className="h-9 text-xs border-border/80 hover:bg-accent text-foreground">
-            <Link href="/targets">
-              <Server size={14} className="mr-1.5 text-emerald-700" />
-              Targets ({totalTargets})
-            </Link>
-          </Button>
-          <Button asChild size="sm" className="h-9 text-xs bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-600/20">
-            <Link href="/scans/new">
-              <PlusCircle size={14} className="mr-1.5" />
-              Launch Scan
-            </Link>
-          </Button>
+          <Link
+            href="/targets"
+            className="px-3.5 py-2 text-xs font-bold uppercase border-1.5 border-ink bg-chalk hover:bg-white text-ink shadow-brutal flex items-center gap-1.5 transition-all active:translate-x-0.5 active:translate-y-0.5"
+          >
+            <Server size={14} className="text-safety-teal" />
+            <span>Targets ({totalTargets})</span>
+          </Link>
+          <Link
+            href="/scans/new"
+            className="px-4 py-2 text-xs font-bold uppercase border-1.5 border-ink bg-safety-teal hover:bg-teal-800 text-white shadow-brutal flex items-center gap-1.5 transition-all active:translate-x-0.5 active:translate-y-0.5"
+          >
+            <PlusCircle size={14} />
+            <span>Launch Scan</span>
+          </Link>
         </div>
       </div>
 

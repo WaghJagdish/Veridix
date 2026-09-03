@@ -56,20 +56,20 @@ export function TopBar() {
   const breadcrumbs = getBreadcrumbs();
 
   return (
-    <header className="flex h-14 items-center justify-between border-b border-border/40 bg-background/80 backdrop-blur-md px-6 z-20 sticky top-0">
+    <header className="flex h-14 items-center justify-between border-b-1.5 border-ink bg-chalk/90 backdrop-blur-md px-6 z-20 sticky top-0 font-mono text-ink">
       {/* Breadcrumb Navigation */}
-      <div className="flex items-center gap-1.5 text-xs">
+      <div className="flex items-center gap-2 text-xs">
         {breadcrumbs.map((crumb, idx) => (
-          <div key={crumb.href} className="flex items-center gap-1.5">
-            {idx > 0 && <ChevronRight size={12} className="text-muted-foreground/50" />}
+          <div key={crumb.href} className="flex items-center gap-2">
+            {idx > 0 && <ChevronRight size={13} className="text-ink/40" />}
             {idx === breadcrumbs.length - 1 ? (
-              <span className="font-semibold text-foreground bg-muted/40 px-2 py-0.5 rounded-md border border-border/40 text-xs">
+              <span className="font-bold text-ink bg-white px-2 py-0.5 border border-ink text-xs shadow-xs">
                 {crumb.label}
               </span>
             ) : (
               <Link 
                 href={crumb.href} 
-                className="text-muted-foreground hover:text-foreground transition-colors font-medium text-xs"
+                className="text-ink/70 hover:text-ink transition-colors font-bold text-xs"
               >
                 {crumb.label}
               </Link>
@@ -79,37 +79,41 @@ export function TopBar() {
       </div>
 
       {/* Right side actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         {/* Active Scan Pulse */}
         {runningScan && (
           <Link href={`/scans/${runningScan.id}`}>
-            <Badge variant="outline" className="gap-1.5 py-1 px-2.5 border-emerald-500/40 bg-emerald-500/10 text-emerald-700 animate-pulse hover:bg-emerald-500/20 transition-all cursor-pointer">
-              <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-              <span className="text-xs font-semibold">Scan Running</span>
-            </Badge>
+            <span className="inline-flex items-center gap-1.5 py-1 px-2.5 border-1.5 border-ink bg-acid text-ink font-mono font-bold text-xs shadow-brutal active:translate-x-0.5 active:translate-y-0.5 cursor-pointer">
+              <span className="h-2 w-2 rounded-full bg-hazard-red animate-ping"></span>
+              <span className="uppercase text-[11px]">Scan Running...</span>
+            </span>
           </Link>
         )}
 
         {/* AI Copilot quick access */}
-        <Button variant="outline" size="sm" asChild className="h-8 gap-1.5 text-xs border-purple-200 text-purple-700 hover:bg-purple-50 hover:text-purple-800 hover:border-purple-300">
-          <Link href="/copilot">
-            <Sparkles size={12} />
-            <span>Copilot</span>
-          </Link>
-        </Button>
+        <Link
+          href="/copilot"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-chalk text-ink border-1.5 border-ink font-mono font-bold text-xs uppercase shadow-brutal transition-all active:translate-x-0.5 active:translate-y-0.5"
+        >
+          <Sparkles size={13} className="text-safety-teal" />
+          <span>Copilot</span>
+        </Link>
 
         {/* API Docs link */}
-        <Button variant="outline" size="sm" asChild className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground border-border/70 hover:bg-accent">
-          <a href="http://localhost:8000/docs" target="_blank" rel="noopener noreferrer">
-            <Terminal size={12} />
-            <span>API</span>
-            <ExternalLink size={10} className="opacity-60" />
-          </a>
-        </Button>
+        <a
+          href="http://127.0.0.1:8000/docs"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-chalk hover:bg-white text-ink border-1.5 border-ink font-mono font-bold text-xs uppercase shadow-brutal transition-all active:translate-x-0.5 active:translate-y-0.5"
+        >
+          <Terminal size={13} />
+          <span>API</span>
+          <ExternalLink size={10} className="opacity-70" />
+        </a>
 
         {/* User Avatar */}
-        <div className="flex items-center gap-2 pl-2 border-l border-border">
-          <div className="h-7 w-7 rounded-lg bg-emerald-100 border border-emerald-300 flex items-center justify-center text-[10px] font-bold text-emerald-800 shadow-sm cursor-pointer hover:bg-emerald-200 transition-colors">
+        <div className="flex items-center gap-2 pl-2 border-l-1.5 border-ink/20">
+          <div className="h-7 w-7 bg-ink text-acid border border-ink flex items-center justify-center text-[10px] font-mono font-bold shadow-brutal">
             VX
           </div>
         </div>
