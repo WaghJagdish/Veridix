@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     judge_provider: str = "openai"
     judge_model: str = "gpt-4o-mini"
     judge_api_key: str = ""
+    groq_api_key: str = ""
     cors_origins: List[str] = ["http://localhost:3000"]
     demo_mode_enabled: bool = True
 

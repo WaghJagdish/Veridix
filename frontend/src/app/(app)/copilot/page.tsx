@@ -1,9 +1,8 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
-import { Sparkles, Send, MessageSquare, ShieldAlert, Activity, Flame, ArrowRight, RotateCcw, ShieldCheck, Key, Bot } from "lucide-react"
+import { Sparkles, Send, MessageSquare, ShieldAlert, Activity, Flame, ArrowRight, RotateCcw, ShieldCheck, Bot, Filter } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useScans, useScanSummary } from "@/hooks/useApi"
 import { api } from "@/lib/api"
@@ -21,7 +20,7 @@ interface Message {
 
 const SUGGESTED_QUESTIONS = [
   "Why did my model fail the Hinglish jailbreak?",
-  "What's the biggest risk in my active scan?",
+  "What is the top security vulnerability in this test?",
   "How do I fix the safety drift?",
   "Explain my overall safety score",
   "What OWASP LLM categories am I failing?",
@@ -92,8 +91,8 @@ function MessageBubble({ message }: { message: Message }) {
         <div className="flex items-center justify-between text-[10px] text-muted-foreground px-1">
           <span>{message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
           {message.modelUsed && (
-            <span className="font-mono text-[9px] px-1.5 py-0.2 rounded bg-muted/60 border border-border">
-              {message.modelUsed}
+            <span className="font-mono text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 border border-purple-200">
+              ⚡ {message.modelUsed}
             </span>
           )}
         </div>
@@ -103,25 +102,32 @@ function MessageBubble({ message }: { message: Message }) {
 }
 
 export default function CopilotPage() {
-  const { data: scans } = useScans()
-  const latestScan = scans && scans.length > 0 ? scans[0] : null
-  const { data: summary } = useScanSummary(latestScan?.id || '')
+  const { data: scans, isLoading: isScansLoading } = useScans()
+  const [selectedScanId, setSelectedScanId] = useState<string>("")
+  
+  // Set default scan when scans load
+  useEffect(() => {
+    if (scans && scans.length > 0 && !selectedScanId) {
+      setSelectedScanId(scans[0].id)
+    }
+  }, [scans, selectedScanId])
 
-  const [groqApiKey, setGroqApiKey] = useState("")
-  const [keySaved, setKeySaved] = useState(false)
+  const selectedScan = scans?.find(s => s.id === selectedScanId) || (scans && scans.length > 0 ? scans[0] : null)
+  const { data: summary } = useScanSummary(selectedScan?.id || '')
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
       role: "assistant",
-      content: `## Welcome to the VERIDIX Real AI Security Copilot ✦
+      content: `## Welcome to the VERIDIX AI Security Copilot ✦
 
-I am connected to your live backend database with **full access to your latest scans, findings, drift events, and model responses**.
+I am powered by **Groq Llama-3.3-70B** with real-time access to your database.
 
-Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile** security analysis tailored to your target models!
+Select any **Safety Audit Test** from the dropdown selector above to talk to me directly about that specific evaluation!
 
 **Ask me questions like:**
-- "Why did my model fail the Hinglish jailbreak?"
-- "What is the top security vulnerability in my scan?"
+- "Why did my model fail the Hinglish jailbreak in this scan?"
+- "What is the top security vulnerability in this test?"
 - "Give me system prompt code to fix safety drift"`,
       links: [],
       timestamp: new Date(),
@@ -131,28 +137,9 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Load Groq API Key from localStorage on mount
-  useEffect(() => {
-    const savedKey = localStorage.getItem("VERIDIX_GROQ_API_KEY") || ""
-    if (savedKey) {
-      setGroqApiKey(savedKey)
-      setKeySaved(true)
-    }
-  }, [])
-
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isTyping])
-
-  const handleSaveKey = () => {
-    if (groqApiKey.trim()) {
-      localStorage.setItem("VERIDIX_GROQ_API_KEY", groqApiKey.trim())
-      setKeySaved(true)
-    } else {
-      localStorage.removeItem("VERIDIX_GROQ_API_KEY")
-      setKeySaved(false)
-    }
-  }
 
   const sendMessage = async (content: string) => {
     if (!content.trim() || isTyping) return
@@ -175,8 +162,7 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
 
       const res = await api.copilot.chat({
         message: content.trim(),
-        scan_id: latestScan?.id,
-        groq_api_key: groqApiKey.trim() || undefined,
+        scan_id: selectedScan?.id,
         messages_history: history,
       })
 
@@ -195,7 +181,7 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
         {
           id: (Date.now() + 1).toString(),
           role: "assistant",
-          content: `## Error Contacting Copilot Backend\n\n${err.message || 'Failed to fetch response.'}\n\nPlease check that your backend is running at http://localhost:8000 and your Groq API key is valid.`,
+          content: `## Error Contacting Copilot Backend\n\n${err.message || 'Failed to fetch response.'}\n\nPlease check that your backend is running at http://localhost:8000.`,
           timestamp: new Date(),
         }
       ])
@@ -215,7 +201,9 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
     setMessages([{
       id: "welcome-reset",
       role: "assistant",
-      content: "Chat cleared. Ask me anything about your AI safety evaluation results.",
+      content: selectedScan 
+        ? `Chat scope set to **${selectedScan.name}**. Ask me any question about this evaluation!`
+        : "Chat cleared. Ask me anything about your AI safety evaluation results.",
       links: [],
       timestamp: new Date(),
     }])
@@ -223,7 +211,7 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
 
   return (
     <div className="max-w-5xl mx-auto space-y-4">
-      {/* Header */}
+      {/* Header with Test Selector */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center shadow-md shadow-purple-600/20">
@@ -234,35 +222,47 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
               AI Security Copilot
               <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800 border border-purple-200">Llama-3.3 70B</span>
             </h1>
-            <p className="text-xs text-muted-foreground">Real LLM-powered context-aware assistant analyzing live scan & vulnerability data</p>
+            <p className="text-xs text-muted-foreground">Select a test scan to give the assistant exact vulnerability context</p>
           </div>
         </div>
 
-        {/* Groq API Key Input */}
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1 sm:w-64">
-            <Key className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <Input
-              type="password"
-              placeholder="Paste Groq API Key (gsk_...)"
-              value={groqApiKey}
+        {/* Scan / Test Selector Dropdown */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 bg-card border border-border px-3 py-1.5 rounded-xl shadow-xs">
+            <Filter size={13} className="text-purple-600" />
+            <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">Active Test:</span>
+            <select
+              value={selectedScanId}
               onChange={e => {
-                setGroqApiKey(e.target.value)
-                setKeySaved(false)
+                setSelectedScanId(e.target.value)
+                setMessages(prev => [
+                  ...prev,
+                  {
+                    id: Date.now().toString(),
+                    role: "assistant",
+                    content: `✦ **Switched Chat Scope to Scan**: \`${scans?.find(s => s.id === e.target.value)?.name}\`. You can now ask questions specifically about this evaluation.`,
+                    timestamp: new Date(),
+                  }
+                ])
               }}
-              className="pl-8 h-8 text-xs font-mono"
-            />
+              className="h-7 text-xs bg-transparent text-foreground font-bold focus:outline-none cursor-pointer max-w-[220px] truncate"
+            >
+              {isScansLoading ? (
+                <option value="">Loading tests...</option>
+              ) : scans && scans.length > 0 ? (
+                scans.map(s => (
+                  <option key={s.id} value={s.id}>
+                    {s.name} {s.is_demo ? "(Demo)" : "(Live)"}
+                  </option>
+                ))
+              ) : (
+                <option value="">No tests found</option>
+              )}
+            </select>
           </div>
-          <Button
-            size="sm"
-            onClick={handleSaveKey}
-            variant={keySaved ? "outline" : "default"}
-            className={cn("h-8 text-xs font-semibold px-3", !keySaved && "bg-purple-600 hover:bg-purple-700 text-white")}
-          >
-            {keySaved ? "Saved ✓" : "Save Key"}
-          </Button>
-          <Button variant="ghost" size="sm" onClick={clearChat} className="h-8 text-xs text-muted-foreground hover:text-foreground px-2">
-            <RotateCcw size={13} />
+
+          <Button variant="outline" size="sm" onClick={clearChat} className="h-9 text-xs text-muted-foreground hover:text-foreground px-3 rounded-xl border-border">
+            <RotateCcw size={13} className="mr-1.5" /> Clear
           </Button>
         </div>
       </div>
@@ -272,14 +272,14 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
         <div className="lg:col-span-1 space-y-4">
           <Card className="p-4 border-border bg-card shadow-xs space-y-3">
             <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground flex items-center justify-between">
-              <span>Active Scope</span>
+              <span>Active Test Context</span>
               <Bot size={13} className="text-purple-600" />
             </div>
-            {latestScan ? (
+            {selectedScan ? (
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <ShieldCheck size={13} className="text-emerald-600 flex-shrink-0" />
-                  <span className="text-xs font-semibold text-foreground truncate">{latestScan.name}</span>
+                  <span className="text-xs font-semibold text-foreground truncate">{selectedScan.name}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {[
@@ -294,17 +294,17 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
                     </div>
                   ))}
                 </div>
-                <Link href={`/scans/${latestScan.id}`} className="flex items-center gap-1 text-[11px] text-emerald-700 hover:text-emerald-800 font-semibold">
-                  <Activity size={10} /> View Full Scan <ArrowRight size={10} />
+                <Link href={`/scans/${selectedScan.id}`} className="flex items-center gap-1 text-[11px] text-emerald-700 hover:text-emerald-800 font-semibold pt-1">
+                  <Activity size={10} /> View Test Details <ArrowRight size={10} />
                 </Link>
               </div>
             ) : (
-              <p className="text-xs text-muted-foreground">No scan data available. Run a scan first.</p>
+              <p className="text-xs text-muted-foreground">No test scan data selected.</p>
             )}
           </Card>
 
           <Card className="p-4 border-border bg-card shadow-xs space-y-2">
-            <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Copilot Direct Links</div>
+            <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Direct Links</div>
             {[
               { label: "All Findings", href: "/findings", icon: <ShieldAlert size={12} className="text-rose-500" /> },
               { label: "Safety Scans", href: "/scans", icon: <Activity size={12} className="text-emerald-600" /> },
@@ -334,7 +334,7 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
                     <Sparkles className="h-4 w-4 animate-spin" />
                   </div>
                   <div className="bg-card border border-border rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2">
-                    <span className="text-xs font-medium text-muted-foreground">Llama-3.3-70B analyzing scan context...</span>
+                    <span className="text-xs font-medium text-muted-foreground">Groq Llama-3.3-70B analyzing test context...</span>
                     <div className="flex items-center gap-1">
                       <div className="h-1.5 w-1.5 rounded-full bg-purple-500 animate-bounce" style={{ animationDelay: "0ms" }} />
                       <div className="h-1.5 w-1.5 rounded-full bg-purple-500 animate-bounce" style={{ animationDelay: "150ms" }} />
@@ -347,7 +347,7 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
             </div>
 
             {/* Suggested questions */}
-            {messages.length <= 2 && (
+            {messages.length <= 3 && (
               <div className="px-5 pb-3 flex flex-wrap gap-2">
                 {SUGGESTED_QUESTIONS.map(q => (
                   <button key={q} onClick={() => sendMessage(q)}
@@ -367,7 +367,7 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder={groqApiKey ? "Ask Llama-3.3-70B about your scan results, findings, or remediation..." : "Ask Copilot about scan results (or add Groq API Key for live Llama 70B response)..."}
+                    placeholder={`Ask Groq Llama 70B about ${selectedScan?.name || 'test results'}...`}
                     rows={1}
                     className="w-full resize-none rounded-xl border border-input bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all min-h-[44px] max-h-[120px]"
                     style={{ height: "auto" }}
@@ -387,7 +387,7 @@ Enter your **Groq API Key** above to enable real-time **Llama-3.3-70b-versatile*
                 </Button>
               </div>
               <p className="text-[10px] text-muted-foreground mt-2 text-center">
-                Powered by Groq Llama-3.3-70B with full backend DB context.
+                Powered by Groq Llama-3.3-70B using backend API key. Active test: <strong className="text-foreground">{selectedScan?.name || 'Latest Scan'}</strong>
               </p>
             </div>
           </Card>
