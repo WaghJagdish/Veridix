@@ -51,6 +51,7 @@ class ScanCreate(BaseModel):
     name: str
     preset: str = "indic"
     languages: List[str] = ["en", "hi", "hinglish"]
+    categories: List[str] = ["harmful_content", "jailbreak", "cultural_sensitivity", "bias"]
     judge_provider: str = "groq"
     judge_model: str = "openai/gpt-oss-120b"
     judge_api_key: Optional[str] = None
