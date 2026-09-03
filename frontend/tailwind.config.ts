@@ -17,6 +17,15 @@ const config: Config = {
     },
     extend: {
       colors: {
+        chalk: "#f5f4ef",
+        "chalk-surface": "#edece4",
+        ink: "#0a0a0c",
+        acid: "#e2f952",
+        "acid-hover": "#d0ec36",
+        "safety-teal": "#0d5c56",
+        "safety-teal-light": "#e4f5f3",
+        redact: "#111113",
+        "hazard-red": "#dc2626",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -73,14 +82,26 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      borderWidth: {
+        '1.5': '1.5px',
+        '3': '3px'
+      },
+      boxShadow: {
+        'brutal': '4px 4px 0px #0a0a0c',
+        'brutal-lg': '8px 8px 0px #0a0a0c',
+        'brutal-acid': '4px 4px 0px #e2f952',
+        'brutal-teal': '4px 4px 0px #0d5c56',
+        'brutal-active': '1px 1px 0px #0a0a0c'
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        mono: ["JetBrains Mono", "monospace"],
+        sans: ["Space Grotesk", "Inter", "sans-serif"],
+        display: ["Space Grotesk", "Inter", "sans-serif"],
+        mono: ["Space Mono", "JetBrains Mono", "monospace"],
       },
     },
   },
