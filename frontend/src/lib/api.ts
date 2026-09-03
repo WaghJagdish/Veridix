@@ -53,4 +53,11 @@ export const api = {
     seed: () => fetchApi<{ success: boolean; message?: string; scan_id?: string; project_id?: string; target_id?: string }>('/demo/seed', { method: 'POST' }),
     status: () => fetchApi<{ seeded: boolean; scan_id?: string; project_id?: string; target_id?: string }>('/demo/status'),
   },
+  copilot: {
+    chat: (data: { message: string; scan_id?: string; groq_api_key?: string; messages_history?: { role: string; content: string }[] }) =>
+      fetchApi<{ reply: string; links: { label: string; href: string }[]; scan_id?: string; model_used: string }>('/copilot/chat', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+  },
 };

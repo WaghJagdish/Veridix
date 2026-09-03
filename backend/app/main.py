@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import create_tables
-from app.api import targets, scans, findings, reports, events, demo
+from app.api import targets, scans, findings, reports, events, demo, copilot
 from app.config import settings
 import asyncio
 
@@ -26,3 +26,4 @@ app.include_router(findings.router_single, prefix="/api")
 app.include_router(reports.router, prefix="/api")
 app.include_router(events.router, prefix="/api")
 app.include_router(demo.router, prefix="/api")
+app.include_router(copilot.router, prefix="/api")
