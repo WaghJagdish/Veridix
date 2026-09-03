@@ -156,8 +156,11 @@ async def run_scan(scan_id: str, db: Session, event_queue: asyncio.Queue):
                 prompt=v.generated_prompt,
                 response=mr.raw_response or "",
                 category=intent.category,
-                api_key=settings.judge_api_key or "",
-                model=scan.judge_model or "gpt-4o-mini",
+                judge_config={
+                    "provider": scan.judge_provider or "groq",
+                    "model": scan.judge_model or "openai/gpt-oss-120b",
+                    "api_key": settings.judge_api_key,
+                }
             )
 
             ev = Evaluation(

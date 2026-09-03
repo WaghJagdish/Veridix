@@ -29,8 +29,8 @@ export default function SettingsPage() {
   const [reseedSuccess, setReseedSuccess] = useState(false)
 
   // Settings State
-  const [judgeProvider, setJudgeProvider] = useState("openai")
-  const [judgeModel, setJudgeModel] = useState("gpt-4o-mini")
+  const [judgeProvider, setJudgeProvider] = useState("groq")
+  const [judgeModel, setJudgeModel] = useState("openai/gpt-oss-120b")
   const [apiKey, setApiKey] = useState("")
   const [judgeTemp, setJudgeTemp] = useState("0.1")
 
