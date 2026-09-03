@@ -28,22 +28,24 @@ export default function ScansPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-1.5 border-ink pb-5 bg-white p-5 border-1.5 shadow-brutal font-mono">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Activity className="text-emerald-700" size={22} />
-            <h1 className="text-2xl font-extrabold tracking-tight">Safety Scans</h1>
+            <Activity className="text-safety-teal" size={22} />
+            <h1 className="text-3xl font-black uppercase tracking-tight text-ink font-display">Safety Scans Archive</h1>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-ink/70 font-sans">
             Multilingual red-teaming evaluations and cross-language safety drift monitors.
           </p>
         </div>
 
-        <Button asChild size="sm" className="h-9 text-xs bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-600/20">
-          <Link href="/scans/new">
-            <Plus className="mr-1.5 h-4 w-4" /> Launch New Scan
-          </Link>
-        </Button>
+        <Link
+          href="/scans/new"
+          className="px-4 py-2.5 bg-safety-teal hover:bg-teal-800 text-white text-xs font-mono font-bold uppercase border-1.5 border-ink shadow-brutal active:translate-x-0.5 active:translate-y-0.5 transition-all inline-flex items-center gap-1.5"
+        >
+          <Plus size={15} />
+          <span>Launch New Scan</span>
+        </Link>
       </div>
 
       {/* Toolbar */}
