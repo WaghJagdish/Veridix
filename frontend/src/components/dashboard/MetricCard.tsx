@@ -14,23 +14,23 @@ interface MetricCardProps {
 
 export function MetricCard({ title, value, icon, description, trend, trendValue, className }: MetricCardProps) {
   return (
-    <Card className={cn(
-      "p-4 border-border bg-card shadow-xs transition-all hover:shadow-sm card-hover",
+    <div className={cn(
+      "p-4 bg-white border-1.5 border-ink shadow-brutal font-mono text-ink transition-all hover:-translate-y-0.5",
       className
     )}>
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-muted/50 flex items-center justify-center">
+          <div className="h-7 w-7 bg-chalk border border-ink flex items-center justify-center">
             {icon}
           </div>
-          <p className="text-xs font-semibold text-muted-foreground leading-tight">{title}</p>
+          <p className="text-xs font-bold text-ink/70 uppercase leading-tight">{title}</p>
         </div>
         {trend && (
           <div className={cn(
-            "flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-full",
-            trend === "up" ? "text-emerald-700 bg-emerald-50 border border-emerald-200" : 
-            trend === "down" ? "text-rose-700 bg-rose-50 border border-rose-200" :
-            "text-amber-700 bg-amber-50 border border-amber-200"
+            "flex items-center gap-0.5 text-[9px] font-bold px-1 py-0.2 border uppercase",
+            trend === "up" ? "text-safety-teal bg-chalk border-ink" : 
+            trend === "down" ? "text-white bg-hazard-red border-ink" :
+            "text-ink bg-acid border-ink"
           )}>
             {trend === "up" ? <TrendingUp size={9} /> : trend === "down" ? <TrendingDown size={9} /> : null}
             {trendValue}
@@ -38,11 +38,11 @@ export function MetricCard({ title, value, icon, description, trend, trendValue,
         )}
       </div>
       <div className="space-y-0.5">
-        <p className="text-2xl font-black text-foreground tabular-nums tracking-tight">{value}</p>
+        <p className="text-3xl font-black text-ink font-sans tracking-tight">{value}</p>
         {description && (
-          <p className="text-[10px] text-muted-foreground leading-relaxed">{description}</p>
+          <p className="text-[10px] text-ink/60 font-mono leading-tight">{description}</p>
         )}
       </div>
-    </Card>
+    </div>
   )
 }
