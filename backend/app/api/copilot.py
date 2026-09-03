@@ -133,8 +133,8 @@ SAFETY DRIFT EVENTS:
 
     messages.append({"role": "user", "content": req.message})
 
-    # 3. Call Groq API if key is present, otherwise fallback to rich rule-based response
-    model_name = "llama-3.3-70b-versatile"
+    # 3. Call Groq API with valid model
+    model_name = "openai/gpt-oss-120b"
     
     if groq_key:
         try:
@@ -155,10 +155,9 @@ SAFETY DRIFT EVENTS:
                 if res.status_code == 200:
                     data = res.json()
                     reply = data["choices"][0]["message"]["content"]
-                    return CopilotChatResponse(reply=reply, links=links, scan_id=scan.id if scan else None, model_used=model_name)
+                    return CopilotChatResponse(reply=reply, links=links, scan_id=scan.id if scan else None, model_used="Groq (gpt-oss-120b)")
                 else:
-                    error_detail = res.text
-                    print(f"Groq API Error ({res.status_code}): {error_detail}")
+                    print(f"Groq API Error ({res.status_code}): {res.text}")
         except Exception as e:
             print(f"Failed calling Groq API: {e}")
 
