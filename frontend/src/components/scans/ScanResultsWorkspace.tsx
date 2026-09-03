@@ -18,12 +18,12 @@ import {
   Flame, 
   Layers, 
   FileText, 
-  Award, 
   Scale, 
-  AlertOctagon,
   Sparkles,
-  Download,
-  ExternalLink
+  MessageSquare,
+  CheckCircle2,
+  AlertTriangle,
+  TrendingDown
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -87,33 +87,90 @@ export function ScanResultsWorkspace({ scan }: { scan: Scan }) {
     failureRate: Math.max(0, Math.round(100 - score))
   }));
 
+  const safetyStatus = s.overall_safety_score >= 80 ? "good" : s.overall_safety_score >= 60 ? "moderate" : "critical"
+  const driftLevelLabel = s.safety_drift_score > 75 ? "Critical" : s.safety_drift_score > 50 ? "High" : s.safety_drift_score > 30 ? "Medium" : "Low"
+
   return (
-    <div className="space-y-6">
-      <Tabs defaultValue="overview" className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-3">
+    <div className="space-y-5">
+      {/* Explainability Summary Card */}
+      <Card className="border-border bg-card shadow-xs overflow-hidden">
+        <div className="bg-gradient-to-r from-slate-50 to-muted/30 border-b border-border px-5 py-3 flex items-center gap-2">
+          <AlertTriangle size={14} className="text-orange-600" />
+          <h2 className="text-xs font-bold uppercase tracking-wide text-foreground">Scan Executive Summary</h2>
+          <span className="ml-auto text-[10px] text-muted-foreground">{scan.name}</span>
+        </div>
+        <div className="grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border">
+          <div className="p-4 space-y-1">
+            <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
+              <span className="h-4 w-4 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-[9px] font-black">1</span>
+              What Happened
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {s.total_tests} adversarial prompts across EN, HI, Hinglish. Model scored <strong>{s.overall_safety_score}% overall safety</strong> with <strong className="text-rose-600">{s.critical_findings} critical findings</strong>.
+            </p>
+          </div>
+          <div className="p-4 space-y-1">
+            <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
+              <span className="h-4 w-4 rounded-full bg-orange-100 text-orange-800 flex items-center justify-center text-[9px] font-black">2</span>
+              Why It Matters
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              <strong className="text-rose-600">{driftLevelLabel} safety drift ({s.safety_drift_score}%)</strong> — guardrails that work in English break down in Hinglish, exposing users to unfiltered content.
+            </p>
+          </div>
+          <div className="p-4 space-y-1.5">
+            <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
+              <span className="h-4 w-4 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[9px] font-black">3</span>
+              What To Do Next
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <CheckCircle2 size={10} className="text-emerald-500 flex-shrink-0" />
+                Review {s.critical_findings} critical findings below
+              </div>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <CheckCircle2 size={10} className="text-emerald-500 flex-shrink-0" />
+                Harden Hinglish system prompt instructions
+              </div>
+              <Link href="/copilot" className="flex items-center gap-1 text-xs text-purple-700 font-semibold hover:text-purple-800">
+                <Sparkles size={10} /> Ask AI Copilot for guidance →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <Tabs defaultValue="overview" className="space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-3">
           <TabsList className="bg-muted p-1 border border-border">
             <TabsTrigger value="overview" className="text-xs px-3">
               Overview & Posture
             </TabsTrigger>
             <TabsTrigger value="drift" className="text-xs px-3 gap-1.5">
               <Flame className="w-3.5 h-3.5 text-orange-500" />
-              Safety Drift Analysis ({s.drift_events || 0})
+              Safety Drift ({s.drift_events || 0})
             </TabsTrigger>
             <TabsTrigger value="findings" className="text-xs px-3 gap-1.5">
               <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
-              Findings Explorer ({s.total_findings || 0})
+              Findings ({s.total_findings || 0})
             </TabsTrigger>
             <TabsTrigger value="testcases" className="text-xs px-3 gap-1.5">
               <Layers className="w-3.5 h-3.5 text-emerald-700" />
-              Test Case Matrix ({s.total_tests || 0})
+              Test Matrix ({s.total_tests || 0})
             </TabsTrigger>
           </TabsList>
 
           <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" asChild className="h-8 gap-1.5 text-xs border-purple-200 text-purple-700 hover:bg-purple-50">
+              <Link href="/copilot">
+                <Sparkles size={12} />
+                <span>Ask Copilot</span>
+              </Link>
+            </Button>
             <Button variant="outline" size="sm" asChild className="h-8 gap-1.5 text-xs border-border hover:bg-accent">
               <Link href={`/scans/${scan.id}/report`}>
                 <FileText size={13} />
-                <span>Executive Audit Report</span>
+                <span>Audit Report</span>
               </Link>
             </Button>
           </div>

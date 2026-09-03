@@ -100,8 +100,7 @@ async def run_scan(scan_id: str, db: Session, event_queue: asyncio.Queue):
         variants_data = await generate_attack_variants(
             intent, scan.languages or ["en"],
             use_llm=bool(settings.judge_api_key),
-            judge_api_key=settings.judge_api_key,
-            judge_model=scan.judge_model or "gpt-4o-mini",
+            judge_provider_config={"api_key": settings.judge_api_key, "model": scan.judge_model or "gpt-4o-mini"},
         )
 
         variants = []

@@ -11,8 +11,9 @@ import {
   ShieldCheck,
   PlusCircle,
   Sparkles,
-  Layers,
-  ChevronRight
+  ChevronRight,
+  Rocket,
+  MessageSquare
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useScans, useTargets } from '@/hooks/useApi';
@@ -26,7 +27,7 @@ export function Sidebar() {
     {
       title: "Core Platform",
       items: [
-        { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+        { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
         { 
           name: 'Safety Scans', 
           href: '/scans', 
@@ -34,6 +35,18 @@ export function Sidebar() {
           badge: scans ? scans.length.toString() : undefined 
         },
         { name: 'Findings Explorer', href: '/findings', icon: AlertTriangle },
+      ]
+    },
+    {
+      title: "AI Features",
+      items: [
+        { 
+          name: 'AI Copilot', 
+          href: '/copilot', 
+          icon: Sparkles, 
+          highlight: true,
+          badge: 'New'
+        },
       ]
     },
     {
@@ -51,6 +64,7 @@ export function Sidebar() {
     {
       title: "Management",
       items: [
+        { name: 'Get Started', href: '/get-started', icon: Rocket },
         { name: 'Platform Settings', href: '/settings', icon: Settings },
       ]
     }
@@ -60,7 +74,7 @@ export function Sidebar() {
     <aside className="flex h-screen w-64 flex-col bg-sidebar-bg text-sidebar-text border-r border-border select-none transition-all duration-200">
       {/* Brand Header */}
       <div className="flex h-16 items-center justify-between px-5 border-b border-border bg-sidebar-bg/90 backdrop-blur-md">
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link href="/dashboard" className="flex items-center gap-2.5 group">
           <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-emerald-500 flex items-center justify-center shadow-md shadow-emerald-600/20 group-hover:scale-105 transition-transform">
             <ShieldCheck className="text-white h-5 w-5" />
           </div>
@@ -71,13 +85,13 @@ export function Sidebar() {
                 v0.1
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground font-medium tracking-wide">Indic AI Safety Trust Layer</p>
+            <p className="text-[10px] text-muted-foreground font-medium tracking-wide">Indic AI Safety Platform</p>
           </div>
         </Link>
       </div>
       
       {/* Navigation list */}
-      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
+      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-5">
         {/* Quick Action Button */}
         <div className="px-1">
           <Link
@@ -97,8 +111,8 @@ export function Sidebar() {
             </h3>
             <nav className="space-y-0.5 pt-1">
               {section.items.map((item) => {
-                const isActive = item.href === '/' 
-                  ? pathname === '/' 
+                const isActive = item.href === '/dashboard' 
+                  ? pathname === '/dashboard' 
                   : pathname.startsWith(item.href);
 
                 return (
@@ -109,7 +123,9 @@ export function Sidebar() {
                       "group relative flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-all duration-150",
                       isActive 
                         ? "bg-emerald-100/80 text-emerald-900 font-semibold border border-emerald-200/80 shadow-xs" 
-                        : "text-foreground/75 hover:bg-emerald-50 hover:text-foreground"
+                        : (item as any).highlight
+                          ? "text-purple-700 hover:bg-purple-50 hover:text-purple-800 border border-transparent hover:border-purple-200/60"
+                          : "text-foreground/75 hover:bg-emerald-50 hover:text-foreground"
                     )}
                   >
                     <div className="flex items-center gap-2.5">
@@ -119,7 +135,9 @@ export function Sidebar() {
                           "transition-colors",
                           isActive 
                             ? "text-emerald-700" 
-                            : "text-muted-foreground group-hover:text-foreground"
+                            : (item as any).highlight
+                              ? "text-purple-600"
+                              : "text-muted-foreground group-hover:text-foreground"
                         )} 
                       />
                       <span>{item.name}</span>
@@ -128,10 +146,12 @@ export function Sidebar() {
                     <div className="flex items-center gap-1.5">
                       {item.badge && (
                         <span className={cn(
-                          "text-[10px] px-1.5 py-0.2 rounded-full font-bold",
-                          isActive 
-                            ? "bg-emerald-200/80 text-emerald-900" 
-                            : "bg-emerald-100/60 text-muted-foreground group-hover:bg-emerald-100"
+                          "text-[10px] px-1.5 py-0.5 rounded-full font-bold",
+                          item.badge === 'New'
+                            ? "bg-purple-100 text-purple-800 border border-purple-200"
+                            : isActive 
+                              ? "bg-emerald-200/80 text-emerald-900" 
+                              : "bg-emerald-100/60 text-muted-foreground group-hover:bg-emerald-100"
                         )}>
                           {item.badge}
                         </span>
@@ -149,7 +169,21 @@ export function Sidebar() {
       </div>
       
       {/* Footer / System Status */}
-      <div className="p-3 border-t border-border bg-sidebar-bg">
+      <div className="p-3 border-t border-border bg-sidebar-bg space-y-2">
+        {/* Copilot shortcut */}
+        <Link href="/copilot"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg border border-purple-200/60 bg-purple-50/50 hover:bg-purple-50 transition-colors group">
+          <div className="h-6 w-6 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center">
+            <Sparkles size={11} className="text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-[11px] font-semibold text-purple-800">AI Security Copilot</div>
+            <div className="text-[9px] text-purple-600">Ask about your scan results</div>
+          </div>
+          <ChevronRight size={12} className="text-purple-400 group-hover:text-purple-600 transition-colors" />
+        </Link>
+
+        {/* Judge status */}
         <div className="flex items-center justify-between rounded-lg bg-card p-2.5 border border-border shadow-xs">
           <div className="flex items-center gap-2">
             <div className="relative flex h-2.5 w-2.5 items-center justify-center">

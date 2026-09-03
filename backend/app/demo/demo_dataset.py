@@ -546,6 +546,7 @@ def seed_demo_data(db: Session) -> dict:
                 timestamp=base_time + timedelta(seconds=30 + i * 15),
             )
             db.add(response)
+            db.flush()
             responses_list.append(response)
 
             # Evaluation
