@@ -19,6 +19,18 @@ app.add_middleware(
 async def startup():
     create_tables()
 
+@app.get("/")
+def root():
+    return {
+        "message": "VERIDIX Safety Evaluation Engine API is running.",
+        "docs": "http://127.0.0.1:8000/docs",
+        "health": "http://127.0.0.1:8000/api/health"
+    }
+
+@app.get("/api/health")
+def health_check():
+    return {"status": "ok", "service": "VERIDIX Engine"}
+
 app.include_router(targets.router, prefix="/api")
 app.include_router(scans.router, prefix="/api")
 app.include_router(findings.router, prefix="/api")
